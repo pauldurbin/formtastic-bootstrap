@@ -18,10 +18,10 @@ module FormtasticBootstrap
 
         def input_content(&block)
           content = [
-            add_on_content(options[:prepend]),
+            add_on_content(options[:prepend], 'prepend'),
             options[:prepend_content],
             yield,
-            add_on_content(options[:append]),
+            add_on_content(options[:append], 'append'),
             options[:append_content]
           ].compact.join("\n").html_safe
 
@@ -36,9 +36,12 @@ module FormtasticBootstrap
           options[:prepend] || options[:prepend_content] || options[:append] || options[:append_content]
         end
 
-        def add_on_content(content)
+        def add_on_content(content, klass='prepend')
           return nil unless content
-          template.content_tag(:span, content, :class => 'input-group-addon')
+          template.content_tag(:div,
+            template.content_tag(:span, content, class: 'input-group-text'),
+            :class => "input-group-#{klass}"
+           )
         end
 
         def form_group_wrapping(&block)
